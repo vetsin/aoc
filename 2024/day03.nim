@@ -32,10 +32,9 @@ iterator parse(a: string, useDo: bool = false): int =
                 let
                     s = cmd.split(',')
                     (x, y) = (parseInt(s[0]), parseInt(s[1]))
-                if useDo and ddo:
-                    yield x*y
-                elif useDo and not ddo:
-                    discard
+                if useDo:
+                    if ddo:
+                        yield x*y
                 else:
                     yield x*y
             else:
