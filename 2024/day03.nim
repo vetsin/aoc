@@ -1,5 +1,5 @@
 import strutils
-#import sequtils
+import sequtils
 
 var input: string = readAll(stdin).strip()
 
@@ -50,3 +50,22 @@ var xtotal = 0
 for y in parse(input, true):
     xtotal += y
 echo xtotal
+
+## this is after seeing how a friend did his in perl
+
+import nre
+
+var ntotal = 0
+var ddo = true
+for m in input.findIter(re"(mul\(\d+,\d+\)|do\(\)|don't\(\))"):
+    if m.match == "do()":
+        ddo = true
+    elif m.match == "don't()":
+        ddo = false
+    else:
+        let 
+            s: seq[int] = m.match.findAll(re"(\d+)").map(parseInt)
+            (x, y) = (s[0], s[1])
+        if ddo:
+            ntotal += x*y
+echo ntotal
