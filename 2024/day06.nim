@@ -7,14 +7,12 @@ let input: string = readAll(stdin).strip()
 type
   Matrix = seq[seq[char]]
   Pos = tuple[i:int,j:int]
-  #Directions = tuple[N: Pos, E: Pos, S: Pos, W: Pos]
 
 const
   N: Pos = (-1,0)
   E: Pos = (0,1)
   S: Pos = (1,0)
   W: Pos = (0,-1)
-  #directions: Directions = (N,E,S,W)
   directions = @[N,E,S,W]
 
 proc newMatrix(s: string): Matrix =
@@ -22,7 +20,6 @@ proc newMatrix(s: string): Matrix =
         result.add(cast[seq[char]](line))
 
 var m = newMatrix(input)
-
 
 proc inBounds(b: Matrix, p: Pos): bool =
     if p.i < 0 or p.j < 0:
@@ -38,15 +35,6 @@ proc `[]=`(b: var Matrix, p: Pos, x: char) =
 
 proc `[]`(b: Matrix, p: Pos): char =
     b[p.i][p.j]
-
-#proc `[]`(b: Matrix, i, j: int): char = 
-#    if i < 0 or j < 0:
-#        return
-#    if i >= b.len:
-#        return
-#    if j >= b[i].len:
-#        return
-#    b[i][j]
 
 proc `$`(b: Matrix): string =
     result = ""
@@ -92,14 +80,7 @@ echo count(res, '#')
 
 type
     HistoryEntry = tuple[p:Pos,d:int]
-    History = seq[HistoryEntry]
     HistoryT = TableRef[HistoryEntry, int]
-
-proc contains(h: History, e: HistoryEntry): bool =
-    for (p,d) in h:
-        if p == e.p and d == e.d:
-            return true
-    return false
 
 proc isLoop(m: Matrix, artifical: Pos): bool = 
     var dir:int = 0

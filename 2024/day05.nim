@@ -59,9 +59,6 @@ proc sort(update: var Update) =
     while not isSorted(update):
         for index in 0..<update.len:
             for rule in rules:
-                #let n = update.checkRule(rule, index)
-                #if n > -1:
-                #    swap(update[index], update[n])
                 if (let n = update.checkRule(rule, index); n) > -1:
                     swap(update[index], update[n])
 
