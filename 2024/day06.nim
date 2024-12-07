@@ -103,7 +103,7 @@ var obs = 0
 var spos = m.start
 for i in 0..<m.len:
     for j in 0..<m[0].len:
-        if m[(i,j)] != '#' and (i,j) != spos:
+        if res[(i,j)] == '#' and m[(i,j)] != '#' and (i,j) != spos:
             if m.isLoop((i,j)):
                 inc obs
 echo obs
