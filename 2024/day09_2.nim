@@ -2,9 +2,9 @@ import strutils
 import sequtils
 import math
 
-#var input = "2333133121414131402"
-#var input = "12345"
-var input: string = readAll(stdin).strip()
+var input = "2333133121414131402"
+#input = "12345"
+input = readAll(stdin).strip()
 if input.len mod 2 != 0:
     input &= "0"
 
@@ -49,8 +49,10 @@ condense(disk)
 #echo $disk
 echo disk.checksum
 
-proc search(d: var Disk, target, size: int): int =
+proc search(d: var Disk, target, size, rightmost: int): int =
   for i, v in d:
+    if i >= rightmost:
+      return -1
     if v == target and i+size < d.len:
       #echo repeat(target, size),  " - ", d[i..i+size]
       if repeat(target, size) == d[i..i+size-1]:
@@ -67,19 +69,37 @@ proc condenseBlock(d: var Disk) =
     else:
       if prevJ != -1:
         inc jsize
-        let atIdx = d.search(-1, jsize)
+        let atIdx = d.search(-1, jsize, j)
         if atIdx >= 0 and atIdx < j:
-          let leftIndex = atIdx
-          let rightIndex = j+1
           for i in 0..<jsize:
-            swap(d[leftIndex+i], d[rightIndex+i])
+            swap(d[atIdx+i], d[j+1+i])
           #echo $d
       jsize = 0
       prevJ = d[j]
     dec j
 
+import nre
+
+
+
 var disk2 = parse(input)
+#echo disk2
+
+# lol for fun
+let matches = ($disk2).findIter(re"(\d)\1+").toSeq
+var j = matches.len-1
+while j >= 0:
+  for f in ($disk2).findIter(re"(\.)\1+"):
+    let mj = matches[j]
+    if f.matchBounds.b >= mj.matchBounds.a:
+      break
+    if f.match.len >= mj.match.len:
+      for i in 0..<mj.match.len:
+        swap(disk2[f.matchBounds.a+i], disk2[mj.matchBounds.a+i])
+      break
+  dec j
+
 #echo $disk2
-condenseBlock(disk2)
+#condenseBlock(disk2)
 #echo $disk2
 echo disk2.checksum
